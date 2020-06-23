@@ -17,6 +17,10 @@ FSJS project 2 - List Filter and Pagination
    scoped to that function.
 ***/
 
+const studentListItem = document.querySelectorAll ('li');
+console.log(studentListItem)
+const studentsForPage = 10;
+
 
 
 
