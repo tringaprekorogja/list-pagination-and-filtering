@@ -38,8 +38,18 @@ const studentsForPage = 10;
        that will be passed into the parens later when you call or 
        "invoke" the function 
 ***/
+function showPage (list, page) {
+    const startIndex = (page * studentsForPage) - studentsForPage
+    const endIndex = page * studentsForPage
 
+    for (let i = 0; i < list.length; i++) {
+       if (list[i] >= startIndex && list[i] <= endIndex) {
+          list[i].style.display = 'block';
+       } 
+    }
+}
 
+showPage(studentListItem, 4 );
 
 
 /*** 
