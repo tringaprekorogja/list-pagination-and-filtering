@@ -2,7 +2,7 @@
 Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
-   
+
 // Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
 
@@ -17,8 +17,7 @@ FSJS project 2 - List Filter and Pagination
    scoped to that function.
 ***/
 
-const studentListItem = document.querySelectorAll ('li');
-console.log(studentListItem)
+const studentListItem = document.querySelectorAll('li');
 const studentsForPage = 10;
 
 
@@ -38,24 +37,74 @@ const studentsForPage = 10;
        that will be passed into the parens later when you call or 
        "invoke" the function 
 ***/
-function showPage (list, page) {
-    const startIndex = (page * studentsForPage) - studentsForPage
-    const endIndex = page * studentsForPage
+const showPage = (list, page) => {
+   const startIndex = (page * studentsForPage) - studentsForPage
+   const endIndex = page * studentsForPage
 
-    for (let i = 0; i < list.length; i++) {
-       if (list[i] >= startIndex && list[i] <= endIndex) {
-          list[i].style.display = 'block';
-       } 
-    }
+   for (let i = 0; i < list.length; i++) {
+      if ( i >= startIndex && i < endIndex) {
+
+         list[i].style.display = 'block';
+      } else {
+         list[i].style.display = 'none';
+      }
+   }
 }
-
-showPage(studentListItem, 4 );
 
 
 /*** 
    Create the `appendPageLinks function` to generate, append, and add 
    functionality to the pagination buttons.
 ***/
+
+const appendPageLinks = (list) => {
+
+   const numOfPages = studentListItem.length / studentsForPage;
+
+   let div = document.createElement('div');
+   div.setAttribute('class', 'pagination');
+   const pageDiv = document.querySelector('.page');
+   pageDiv.appendChild(div);
+   const ul = document.createElement('ul');
+   div.appendChild(ul);
+
+   for (let i = 1; i <= numOfPages; i++) {
+      const li = document.createElement('li');
+      ul.appendChild(li);
+
+      const a = document.createElement('a');
+      a.setAttribute('href', '#' );
+      a.innerHTML = i;
+
+      li.appendChild(a);
+   }
+
+   const activeA = document.getElementsByTagName('a')[0].className = 'active';
+
+   const a = document.querySelectorAll ('a');
+
+   for (let i = 0; i < a.length; i++) {
+      a[i].addEventListener('click', (e)=>{
+         for (let i=0; i < a.length; i++) {
+            a[i].className = '';
+           
+         }
+         event.target.className = ('active');
+
+         const page = event.target.textContent;
+         showPage(studentListItem, page )
+                   
+         
+      })
+   }
+
+}
+
+showPage(studentListItem, 1);
+
+appendPageLinks(studentListItem);
+
+
 
 
 
