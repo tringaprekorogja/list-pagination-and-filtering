@@ -3,47 +3,23 @@ Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
 
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
+/* Creates global variables */
 
-/*** 
-   Add your global variables that store the DOM elements you will 
-   need to reference and/or manipulate. 
-   
-   But be mindful of which variables should be global and which 
-   should be locally scoped to one of the two main functions you're 
-   going to create. A good general rule of thumb is if the variable 
-   will only be used inside of a function, then it can be locally 
-   scoped to that function.
-***/
+const studentListItem = document.querySelectorAll('li'); // Stores the students list item elements.
+const studentsForPage = 10; // Stores the number of items to show on each page.
 
-const studentListItem = document.querySelectorAll('li');
-const studentsForPage = 10;
+/* Creates a function to hide all the students except for the ten we want displayed on a page */
 
-
-
-
-/*** 
-   Create the `showPage` function to hide all of the items in the 
-   list except for the ten you want to show.
-
-   Pro Tips: 
-     - Keep in mind that with a list of 54 students, the last page 
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when 
-       you initially define the function, and it acts as a variable 
-       or a placeholder to represent the actual function `argument` 
-       that will be passed into the parens later when you call or 
-       "invoke" the function 
-***/
 const showPage = (list, page) => {
    const startIndex = (page * studentsForPage) - studentsForPage
    const endIndex = page * studentsForPage
 
-   for (let i = 0; i < list.length; i++) {
-      if ( i >= startIndex && i < endIndex) {
+  // Iterates throught the list items
 
+   for (let i = 0; i < list.length; i++) {
+    // Checks if i is  greater than or equal to the start index variable and less than the end index variable.
+      if ( i >= startIndex && i < endIndex) {
          list[i].style.display = 'block';
       } else {
          list[i].style.display = 'none';
@@ -52,46 +28,55 @@ const showPage = (list, page) => {
 }
 
 
-/*** 
-   Create the `appendPageLinks function` to generate, append, and add 
-   functionality to the pagination buttons.
-***/
-
+/* Creates pagination buttons and their functionality. */
 const appendPageLinks = (list) => {
 
+   // Calculates how many pages are needed for the list.
    const numOfPages = studentListItem.length / studentsForPage;
 
-   let div = document.createElement('div');
-   div.setAttribute('class', 'pagination');
+   // Creates a div, gives it a class and appends it to the .page div.
+   let paginationDiv = document.createElement('div');
+   paginationDiv.setAttribute('class', 'pagination');
    const pageDiv = document.querySelector('.page');
    pageDiv.appendChild(div);
    const ul = document.createElement('ul');
-   div.appendChild(ul);
+   paginationDiv.appendChild(ul);
 
+  // Iterates as many times as the number of pages and creates the correct number of li elements.
    for (let i = 1; i <= numOfPages; i++) {
       const li = document.createElement('li');
-      ul.appendChild(li);
+      ul.appendChild(list);
 
-      const a = document.createElement('a');
-      a.setAttribute('href', '#' );
-      a.innerHTML = i;
+      const link = document.createElement('a');
+      link.setAttribute('href', '#' );
+      link.innerHTML = i;
 
-      li.appendChild(a);
+      li.appendChild(link);
    }
+   // Adds the active class name to the first pagination link.
 
-   const activeA = document.getElementsByTagName('a')[0].className = 'active';
+   document.getElementsByTagName('a')[0].className = 'active';
 
-   const a = document.querySelectorAll ('a');
+   const links = document.querySelectorAll ('a');
 
-   for (let i = 0; i < a.length; i++) {
-      a[i].addEventListener('click', (e)=>{
-         for (let i=0; i < a.length; i++) {
-            a[i].className = '';
+   // Iterates through all the links and adds an eventListener.
+
+   for (let i = 0; i < links.length; i++) {
+      links[i].addEventListener('click', (e)=>{
+
+         // Iterates through all the links and removes the active class name.
+
+         for (let i=0; i < links.length; i++) {
+            links[i].className = '';
            
          }
+         // Adds the active class to the link that was clicked.
          event.target.className = ('active');
+         
 
          const page = event.target.textContent;
+
+
          showPage(studentListItem, page )
                    
          
@@ -100,8 +85,10 @@ const appendPageLinks = (list) => {
 
 }
 
+/* Calls the function and passes arguments which should be shown initially */
 showPage(studentListItem, 1);
 
+/*Calls the function*/
 appendPageLinks(studentListItem);
 
 
@@ -110,4 +97,3 @@ appendPageLinks(studentListItem);
 
 
 
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
