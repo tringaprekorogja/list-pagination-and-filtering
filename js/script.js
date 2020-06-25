@@ -15,11 +15,11 @@ const showPage = (list, page) => {
    const startIndex = (page * studentsForPage) - studentsForPage
    const endIndex = page * studentsForPage
 
-  // Iterates throught the list items
+   // Iterates throught the list items
 
    for (let i = 0; i < list.length; i++) {
-    // Checks if i is  greater than or equal to the start index variable and less than the end index variable.
-      if ( i >= startIndex && i < endIndex) {
+      // Checks if i is  greater than or equal to the start index variable and less than the end index variable.
+      if (i >= startIndex && i < endIndex) {
          list[i].style.display = 'block';
       } else {
          list[i].style.display = 'none';
@@ -38,58 +38,79 @@ const appendPageLinks = (list) => {
    let paginationDiv = document.createElement('div');
    paginationDiv.setAttribute('class', 'pagination');
    const pageDiv = document.querySelector('.page');
-   pageDiv.appendChild(div);
+   pageDiv.appendChild(paginationDiv);
    const ul = document.createElement('ul');
    paginationDiv.appendChild(ul);
 
-  // Iterates as many times as the number of pages and creates the correct number of li elements.
+   // Iterates as many times as the number of pages and creates the correct number of li elements.
    for (let i = 1; i <= numOfPages; i++) {
       const li = document.createElement('li');
-      ul.appendChild(list);
+      ul.appendChild(li);
 
       const link = document.createElement('a');
-      link.setAttribute('href', '#' );
+      link.setAttribute('href', '#');
       link.innerHTML = i;
 
       li.appendChild(link);
    }
    // Adds the active class name to the first pagination link.
-
    document.getElementsByTagName('a')[0].className = 'active';
-
-   const links = document.querySelectorAll ('a');
-
+   const links = document.querySelectorAll('a');
    // Iterates through all the links and adds an eventListener.
-
    for (let i = 0; i < links.length; i++) {
-      links[i].addEventListener('click', (e)=>{
-
+      links[i].addEventListener('click', (e) => {
          // Iterates through all the links and removes the active class name.
-
-         for (let i=0; i < links.length; i++) {
+         for (let i = 0; i < links.length; i++) {
             links[i].className = '';
-           
+
          }
          // Adds the active class to the link that was clicked.
          event.target.className = ('active');
-         
+
 
          const page = event.target.textContent;
 
 
-         showPage(studentListItem, page )
-                   
-         
+         showPage(studentListItem, page)
+
+
       })
    }
+
+}
+
+const appendSearchComponent = (list)=> {
+   const searchDiv = document.createElement('div')
+   searchDiv.className = 'student-search'
+
+   const input = document.createElement('input')
+   input.placeholder = 'Search for students...';
+
+   const button = document.createElement('button')
+   button.textContent= 'Search';
+
+   searchDiv.appendChild(input);
+   searchDiv.appendChild(button)
+
+   const pageHeader = document.querySelector('.page-header')
+   pageHeader.appendChild(searchDiv);
+
+   button.addEventListener('click', (e)=> {
+        console.log('I was clicked');
+
+   })
+
+   
 
 }
 
 /* Calls the function and passes arguments which should be shown initially */
 showPage(studentListItem, 1);
 
-/*Calls the function*/
+/* Calls the function */
 appendPageLinks(studentListItem);
+
+appendSearchComponent();
 
 
 
