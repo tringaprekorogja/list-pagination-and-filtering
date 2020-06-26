@@ -12,11 +12,13 @@ const studentsForPage = 10; // Stores the number of items to show on each page.
 /* Creates a function to hide all the students except for the ten we want displayed on a page */
 
 const showPage = (list, page) => {
+   console.log("List from show page " + list)
    const startIndex = (page * studentsForPage) - studentsForPage
    const endIndex = page * studentsForPage
-
+   for (let i = 0; i < studentListItem.length; i++){
+      studentListItem[i].style.display = 'none';
+   } 
    // Iterates throught the list items
-
    for (let i = 0; i < list.length; i++) {
       // Checks if i is  greater than or equal to the start index variable and less than the end index variable.
       if (i >= startIndex && i < endIndex) {
@@ -32,9 +34,10 @@ const showPage = (list, page) => {
 const appendPageLinks = (list) => {
 
    // Calculates how many pages are needed for the list.
-   const numOfPages = studentListItem.length / studentsForPage;
-
+   const numOfPages = list.length / studentsForPage;
+    
    // Creates a div, gives it a class and appends it to the .page div.
+
    let paginationDiv = document.createElement('div');
    paginationDiv.setAttribute('class', 'pagination');
    const pageDiv = document.querySelector('.page');
@@ -55,6 +58,7 @@ const appendPageLinks = (list) => {
    }
    // Adds the active class name to the first pagination link.
    document.getElementsByTagName('a')[0].className = 'active';
+
    const links = document.querySelectorAll('a');
    // Iterates through all the links and adds an eventListener.
    for (let i = 0; i < links.length; i++) {
@@ -71,7 +75,7 @@ const appendPageLinks = (list) => {
          const page = event.target.textContent;
 
 
-         showPage(studentListItem, page)
+         showPage(list, page)
 
 
       })
@@ -79,7 +83,8 @@ const appendPageLinks = (list) => {
 
 }
 
-const appendSearchComponent = (list)=> {
+const appendSearchComponent = (list) => {
+
    const searchDiv = document.createElement('div')
    searchDiv.className = 'student-search'
 
@@ -87,7 +92,7 @@ const appendSearchComponent = (list)=> {
    input.placeholder = 'Search for students...';
 
    const button = document.createElement('button')
-   button.textContent= 'Search';
+   button.textContent = 'Search';
 
    searchDiv.appendChild(input);
    searchDiv.appendChild(button)
@@ -95,14 +100,48 @@ const appendSearchComponent = (list)=> {
    const pageHeader = document.querySelector('.page-header')
    pageHeader.appendChild(searchDiv);
 
-   button.addEventListener('click', (e)=> {
-        console.log('I was clicked');
+   const performSearch = (list) => {
+      const userInput = input.value
+      const searchResults = [];
+      for (let i = 0; i < list.length; i++) {
 
+         const studentName = list[i].firstElementChild.firstElementChild.nextElementSibling.textContent
+         if (userInput.length !== 0 && studentName.toLowerCase().includes(userInput.toLocaleLowerCase())) {
+              searchResults.push(list[i]);      
+         } else {
+            
+         }
+      }
+      console.log(searchResults);
+      appendPageLinks(searchResults);
+      showPage(searchResults, 1);
+   }
+
+   button.addEventListener('click', (e) => {
+      performSearch(studentListItem);
    })
 
-   
+   input.addEventListener('keyup', (e) => {
+      performSearch(studentListItem)
+   })
+
+   //const student = document.querySelectorAll('h3');
+
+   // for (let i = 0; i < student.length; i++) {
+   //const studentName = student[i].textContent
+   //if(userInput.length !== 0 && studentName.toLowerCase().includes(userInput.toLocaleLowerCase())) {
+   //console.log(studentName)
+   //}
+
+   //}
+
+
 
 }
+
+
+
+
 
 /* Calls the function and passes arguments which should be shown initially */
 showPage(studentListItem, 1);
@@ -110,7 +149,7 @@ showPage(studentListItem, 1);
 /* Calls the function */
 appendPageLinks(studentListItem);
 
-appendSearchComponent();
+appendSearchComponent(studentListItem);
 
 
 
