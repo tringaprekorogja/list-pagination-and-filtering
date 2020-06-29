@@ -12,12 +12,13 @@ const studentsForPage = 10; // Stores the number of items to show on each page.
 /* Creates a function to hide all the students except for the ten we want displayed on a page */
 
 const showPage = (list, page) => {
-   console.log("List from show page " + list)
    const startIndex = (page * studentsForPage) - studentsForPage
    const endIndex = page * studentsForPage
-   for (let i = 0; i < studentListItem.length; i++){
+   // Iterates through the student list items 
+   for (let i = 0; i < studentListItem.length; i++) {
+      // Initially hides all the student list items
       studentListItem[i].style.display = 'none';
-   } 
+   }
    // Iterates throught the list items
    for (let i = 0; i < list.length; i++) {
       // Checks if i is  greater than or equal to the start index variable and less than the end index variable.
@@ -35,15 +36,24 @@ const appendPageLinks = (list) => {
 
    // Calculates how many pages are needed for the list.
    const numOfPages = list.length / studentsForPage;
-    
-   // Creates a div, gives it a class and appends it to the .page div.
 
+   
+   const paginationDivToRemove = document.querySelector('.pagination')
+   const pageDiv = document.querySelector('.page');
+
+   // Checks if pagination div exists and removes it from its parent
+   if (paginationDivToRemove != null) {
+      pageDiv.removeChild(paginationDivToRemove)
+   }
+   // Creates a div, gives it a class and appends it to the .page div.
    let paginationDiv = document.createElement('div');
    paginationDiv.setAttribute('class', 'pagination');
-   const pageDiv = document.querySelector('.page');
+
    pageDiv.appendChild(paginationDiv);
+
    const ul = document.createElement('ul');
    paginationDiv.appendChild(ul);
+
 
    // Iterates as many times as the number of pages and creates the correct number of li elements.
    for (let i = 1; i <= numOfPages; i++) {
@@ -56,8 +66,13 @@ const appendPageLinks = (list) => {
 
       li.appendChild(link);
    }
+   
    // Adds the active class name to the first pagination link.
-   document.getElementsByTagName('a')[0].className = 'active';
+   if (ul.children.length > 0) {
+      document.getElementsByTagName('a')[0].className = 'active';
+
+   }
+
 
    const links = document.querySelectorAll('a');
    // Iterates through all the links and adds an eventListener.
@@ -73,8 +88,6 @@ const appendPageLinks = (list) => {
 
 
          const page = event.target.textContent;
-
-
          showPage(list, page)
 
 
@@ -82,9 +95,10 @@ const appendPageLinks = (list) => {
    }
 
 }
-
+ /* Creates search component and its functionality */
 const appendSearchComponent = (list) => {
-
+   
+   // Creates and appends a search bar
    const searchDiv = document.createElement('div')
    searchDiv.className = 'student-search'
 
@@ -100,55 +114,69 @@ const appendSearchComponent = (list) => {
    const pageHeader = document.querySelector('.page-header')
    pageHeader.appendChild(searchDiv);
 
+   /* Filtes the list by name for those that include the search value  */
    const performSearch = (list) => {
       const userInput = input.value
-      const searchResults = [];
-      for (let i = 0; i < list.length; i++) {
 
+      // Creates an empty array to hold the search results
+      const searchResults = [];
+      // Iterates through the list items 
+      for (let i = 0; i < list.length; i++) {
+         // Creates a variable to store the students name 
          const studentName = list[i].firstElementChild.firstElementChild.nextElementSibling.textContent
+         // Cheks if the user input is not 0 and if the students name includes user input
          if (userInput.length !== 0 && studentName.toLowerCase().includes(userInput.toLocaleLowerCase())) {
-              searchResults.push(list[i]);      
-         } else {
-            
+            // Adds that list item to the search results array
+            searchResults.push(list[i]);
          }
+
       }
-      console.log(searchResults);
+
+      /* Calls functions to show a page, append paginationlinks and 
+      handle no result returned giving the search results as an argument */
+      maybeAddNoMachFoundParagraph(searchResults);
       appendPageLinks(searchResults);
       showPage(searchResults, 1);
    }
-
+   // Adds an event listener to the button
    button.addEventListener('click', (e) => {
       performSearch(studentListItem);
    })
-
+   // Adds an event listener to the input feild
    input.addEventListener('keyup', (e) => {
       performSearch(studentListItem)
    })
+}
 
-   //const student = document.querySelectorAll('h3');
+/* Handles no results returned */
+const maybeAddNoMachFoundParagraph = (searchResults) => {
+   let noMachesFoundParagraph = document.querySelector('.no-search-results-paragraph')
+   //Checks if the noMatchesFoundParagraph doesn't exist and creates a p gives it a class and appends it to the .page div
+   if (noMachesFoundParagraph == null) {
+      noMachesFoundParagraph = document.createElement('p')
+      noMachesFoundParagraph.className = 'no-search-results-paragraph'
+      document.querySelector('.page').appendChild(noMachesFoundParagraph);
+   }
 
-   // for (let i = 0; i < student.length; i++) {
-   //const studentName = student[i].textContent
-   //if(userInput.length !== 0 && studentName.toLowerCase().includes(userInput.toLocaleLowerCase())) {
-   //console.log(studentName)
-   //}
-
-   //}
-
-
-
+   // Checks if the search result has any list items in it
+   if (searchResults.length == 0) {
+      // Sets the HTML content of the paragraph
+      noMachesFoundParagraph.innerHTML = 'There are no matches found'
+   } else if (searchResults.length > 0) {
+       // Sets the HTML content of the paragraph
+      noMachesFoundParagraph.innerHTML = '';
+   }
 }
 
 
 
 
 
-/* Calls the function and passes arguments which should be shown initially */
+/* Calls the function to show page and passes arguments which should be shown initially */
 showPage(studentListItem, 1);
-
-/* Calls the function */
+/* Calls the function to append paggination links passing the student list as an argument */
 appendPageLinks(studentListItem);
-
+/* Calls the function to append search component passing the student list as an argument */
 appendSearchComponent(studentListItem);
 
 
